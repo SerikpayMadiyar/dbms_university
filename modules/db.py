@@ -18,17 +18,23 @@ class Database():
     def insert_many(self, data, collection_name):
         return collection_name.insert_many(data)
     
-    def find():
-        return 0
+    def find_all(self, collection_name):
+        return collection_name.find()
     
-    def find_one_by_id():
-        return 0
+    def find_by_filter(self, filter, collection_name):
+        return collection_name.find(filter)
     
-    def update_one():
-        return 0
+    def find_one_by_id(self, id, collection_name):
+        return collection_name.find(id)
     
-    def update_many():
-        return 0
+    def update_one(self, filter, updated_data, collection_name):
+        return collection_name.update_one(filter, {'$set' : updated_data})
     
-    def delete_one():
-        return 0
+    def update_many(self, filter, updated_data, collection_name):
+        return collection_name.update_many(filter, {'$set' : updated_data})
+    
+    def delete_one(self, filter, collection_name):
+        return collection_name.delete_one(filter)
+    
+    def delete_many(self, filter, collection_name):
+        return collection_name.delete_many(filter)
