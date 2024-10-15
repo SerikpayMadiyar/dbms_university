@@ -1,7 +1,9 @@
+from contextlib import contextmanager
 from os import getenv
 
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from pydantic import BaseModel
 
 load_dotenv()
 
@@ -12,9 +14,13 @@ class Database():
         self.user_collection = self.db['users']
         self.catalog_collection = self.db['catalog']
 
-    def insert_one(self, data, collection_name):
-        return collection_name.insert_one(data)
-    
+    def insert_one(self, data: BaseModel, collection_name):
+        try:
+            data = data.dict()
+            return collection_name.insert_one(data)
+        except:
+            print('insertion error')
+
     def insert_many(self, data, collection_name):
         return collection_name.insert_many(data)
     
@@ -38,3 +44,11 @@ class Database():
     
     def delete_many(self, filter, collection_name):
         return collection_name.delete_many(filter)
+    
+@contextmanager
+def get_db():
+    db = Database()
+    try:
+        yield db
+    finally:
+        print("Closing DB")
